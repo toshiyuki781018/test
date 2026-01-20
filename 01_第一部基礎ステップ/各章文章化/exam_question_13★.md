@@ -1,17 +1,4 @@
-# 問題１３：3つのNetworkPolicyから条件に合うものを適用する問題
-
-## 【問題】
-
-２つのDeploymentがNameSpace「frontend」「banckend」にそれぞれインストールされている。
-NameSpace、「frontend」「banckend」の間に相互通信を行うためのNetWorkPoliyの適用を行いなさい。
-条件として、「frontend」「banckend」の相互間通信を行うために必要なPolicyは最も制限の少ないポリシーを利用することになります。
-
-指定のディレクトリに3つのNetworkPolicyを記載したYamlファイルがありますので、条件に見合うYamlファイルの適用を実施しなさい。
-
-
-## 【設定情報】特になし
-
-## 【■事前準備】
+# 問題１３：NetWorkPolicy適用
 
 #### ■参考となるk8sドキュメント
 > [NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
@@ -47,4 +34,5 @@ NameSpace、「frontend」「banckend」の間に相互通信を行うためのN
 
 時期によって問題の概要が変わる可能性があるので、問題を解く上でYamlファイルの確認はきちんと行うべきです。
 ```
+
 
