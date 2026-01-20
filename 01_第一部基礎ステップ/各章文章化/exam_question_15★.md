@@ -1,18 +1,5 @@
 # 問題１５：CRDの一覧取得とJsonPathから指定の値を取得する方法
 
-## 【問題】
-
-対象の環境にはCRDがスケジューリングされています。その中でCert-managerと記載されたすべてのCRDの一覧を取得して
-custom-crd.yamlへの保存を保存を実施しなさい。
-その上でcert-managerからSubjectsフィールドを取得して、cert-manager-subject.yamlへの保存を実施しなさい。
-
-## 【■事前準備】
-
-#### ■対象となるCRDのスケジューリング
-```bash
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.crds.yaml
-```
-
 ## 【▼回答】
 
 #### ▼カスタムリソースCRDであるCert-manager一覧の取得と指定のファイルへの保存
@@ -114,4 +101,5 @@ spec:                       # ★
 ```
 CRDのYamlファイル構造を理解し、JsonPathから値の取得を行うことができればそこまで難しい問題ではないですね。
 ただ、その意味が分からないと問題すら解くのが難しくなってしまうのでそこを注意してもらえればよいです。
+
 ```
