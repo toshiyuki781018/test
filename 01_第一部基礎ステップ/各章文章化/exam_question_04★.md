@@ -1,51 +1,5 @@
 # 問題４：sidecarコンテナの追加　
 
-## 【問題】
-
-すでにApplyされているDeploymentに対して、指定されたイメージを追加してサイドカーコンテナを追加しなさい
-設定情報については下記に記載します。
-
-## 【設定情報】
-
-- Deployment名      `synergy-leverager`
-- サイドカーコンテナ名 `sidecar`
-- Sidecarのイメージ　 `busybox:stable`
-- 追加コンテナのシェル `/bin/sh -c "tail -n+1 -f /var/log/synergy-leverager.log"`
-- 他の条件           `ログファイルの共有を実行`
-
-## 【■事前準備】
-
-#### ■サイドカーコンテナの作成
-```bash
-cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: synergy-leverager
-  name: synergy-leverager
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: synergy-leverager
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: synergy-leverager
-    spec:
-      containers:
-      - env:
-        - name: LOG_FILENAME
-          value: "/var/log/synergy-leverager.log"
-        image: lfcert/monitor:latest
-        name: monitor
-EOF
-```
-
 #### ■参考となるk8sドキュメント
 
 > [サイドカーコンテナ](https://kubernetes.io/ja/docs/concepts/cluster-administration/logging/#sidecar-container-with-logging-agent)
@@ -150,5 +104,6 @@ kubectl logs pod/synergy-leverager-84557b5d5b-tskx6 -c sidecar
 意味がない。そのため、InitContainerを使用せずにサイドカーコンテナを作成する必要があるのでそこを注意しましょう。
 
 Deploymentのハッシュ値は作成したDeploymentによって変わるのでそこを注意する
+
 
 ```
