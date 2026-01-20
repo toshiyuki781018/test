@@ -1,42 +1,5 @@
 # 問題１０：Helmによるインストールとテンプレート作成
 
-## 【問題】
-
-Helmを使用してArgo―cdのインストールを行います。
-その際に、CRDを抜いたテンプレートファイルを指定のフォルダに作成を行い、最後はHelmコマンドを使用して、Argo-CDインストールを実行しなさい。
-
-Helmにてインストールを行う際の設定情報は以下記載
-
-## 【設定情報】
-
-- Helmのリポジトリ登録 argoという名前の公式である「ArgoCD Helm Chartリポジトリ」の追加を実施
-- リポジトリ名称 `argo`
-- Namespace `argocd`
-- ArgoCD-テンプレートバージョン `7.7.3`
-- テンプレートの保存箇所 `~/argo-helm.yaml`
-- CRDのインストールはNG
-
-## 【■事前準備】
-
-#### ■NameSpaceの作成
-```bash
-kubectl create namespace argocd
-```
-
-#### ■Helmのインストールと確認
-```baSh
-curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
-sudo apt-get install apt-transport-https --yes
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-sudo apt-get update
-sudo apt-get install helm
-```
-
-```
-helm version
-version.BuildInfo{Version:"v3.17.2", ~~以下略~~]
-```
-
 ## 【▼回答】
 
 #### ▼ArgoCDのHelmリポジトリURLの確認とレポジトリ作成とアップデート
@@ -120,3 +83,4 @@ Helmのオプションである「--set=crds.install=false」であるCRDを除�
 
 あと注意点としては、作成したテンプレートYamlファイルからもkubectlコマンドを使用すればArgoCDのインストールは実施できるが
 Helmコマンドからはインストールした履歴は残らないので、Helm installコマンドを使用してインストールを実施する必要がある。
+
