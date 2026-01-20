@@ -1,53 +1,5 @@
 # 問題３：Deploymentのリソース設定
 
-## 【問題】
-
-k8s上で管理しているWordPressはDeploymentで3つのPodを起動していますが、一部のPodが稼働しておりません。すべてのPodへリソース要求の設定を行う必要があります。
-下記設定内容や条件を確認の上で、設定を行いなさい
-
-## 【条件】
-- 3つあるPod（Deployment）の容量を均等に配分
-- コンテナとInitコンテナの両方に同じリクエストを設定
-- ResourceRequestsの更新
-- 更新後はWordPressは3つのレプリカ数を保持し、すべてのPodが稼働している状態であること
-
-## 【■事前準備】
-
-#### ■WordPressのDeployment作成
-```bash
-cat > wordpress-deploy.yaml << EOF
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: wordpress
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: wordpress
-  strategy: {}
-  template:
-    metadata:
-      labels:
-        app: wordpress
-    spec:
-      initContainers:
-      - name: init-wordpress
-        image: busybox
-        command: ["sh","-c","echo Initialization && sleep 5"]
-      containers:
-      - image: wordpress:latest
-        name: wordpress
-        ports:
-        - containerPort: 80
-EOF
-```
-
-
-```bash
-kubectl apply -f wordpress-deploy.yaml
-```
-
 
 #### ■参考となるk8sドキュメント
 
@@ -207,4 +159,5 @@ Resourcesの中にRequestsとLimitが割り当てられている。
 ※注意点
 この問題はあくまで疑似的に問題を解くための手法として、例を挙げています。実際の問題は問題文や
 出てくる内容にかなり違いがあるので、そこを認識しておくようにしてください。
+
 ```
