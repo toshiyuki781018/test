@@ -1,21 +1,4 @@
-# 問題９：FlannnelとCalicoの選択
-
-## 【問題】
-
-NetworkPolicyの使用が可能なコンテナネットワークインターフェイス（CNI）をインストールして構成します。
-FlannelとCalicoの2つからCNIどちらかのインストールを実施しなさい。
-
-その後、選択したCNIがk8sクラスターに適切にインストールされているかを確認し、必要があれば修正を行いなさい。
-
-
-## 【設定情報】
-
-- Flannel Ver:0.26.1
-　Manifests： https://github.com/flannel-io/flannel/releases/download/v0.26.1/kube-flannel.yml
-
-- Calico ver:3.2.8.2
-　Manifests： https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/tigera-operator.yaml
-
+# 問題９：FlannelとCalicoの選択
 
 #### ■参考となるドキュメント
 
@@ -84,3 +67,4 @@ kubectl apply -f custom-resources.yaml
 
 - この問題は一見すると、URLにあるYamlファイルを適用すればよいように見えるが、適用するだけどCoreDNSが動作しなくなってしまう
 - CoreDNSを動作させるには、custom-resourcesを編集して適用する必要があるのでそこを注意すればよし
+
