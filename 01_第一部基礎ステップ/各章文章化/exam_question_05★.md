@@ -1,31 +1,5 @@
 # 問題５：DeploymentのPort指定とServiceリソース設定による外部解放
 
-## 【問題】
-
-すでにApplyされているDeplopymentにスケジューリングされているnginxコンテナに対してPortを追加しなさい
-Port追加を実施したらServiceリソースを作成し、NodePortをして外部公開しなさい。設定値は以下記載
-
-## 【設定情報】
-
-##### Deployment情報
-- Namespace             `spline-reticulator`
-- Nginxコンテナの追記Port  `80`
-- 対象となるDeployment    `front-end`
-
-###### Service情報
-- 追加するPort       `80`
-- 追加するTargetPort `80`
-- Service名         `front-end-service`
-- serviceのType     `Nodeport`
-
-## 【■事前準備】
-
-#### ■NameSpaceの作成とDeploymentの作成
-```bash
-kubectl create ns spline-reticulator
-kubectl create deployment front-end --image=nginx -n spline-reticulator
-```
-
 #### ■参考となるk8sドキュメント
 > [コンテナのポート設定](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#exposing-pods-to-the-cluster)
 
@@ -109,4 +83,5 @@ status:
 ```
 すでにスケジューリングされているDeploymentにEditコマンドを使用して、Portの追記を行い
 Serviceリソースを設定すればよいのでそこまで難しい問題ではないです。
+
 ```
