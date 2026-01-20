@@ -1,24 +1,5 @@
 # 問題２：cri-dockerdのインストールとIPV4よるのパケット転送の有効化
 
-## 【問題】 ※この問題はKillerCodaを使用して、回答することをお勧めします
-- cri-dockerdをインストールを行い、その後ブリッジされたトラフィックの適用を実施
-- IPv4フォワーディングを有効化し、iptablesからブリッジされたトラフィックを見えるようにする設定
-- インストール時にIPV4フォワーディングの有効化
-- System パラメータを下記概要で設定
-```bash
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward = 1
-```
-
-## 【■事前準備】
-
-#### ■cri-docker_0.3.9.3-0.ubuntu-fotal_amd64.debのダウンロードを実施
-```bash
-curl -L -o cri-dockerd_0.3.9.3-0.ubuntu-focal_amd64.deb \
-https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.9/cri-dockerd_0.3.9.3-0.ubuntu-focal_amd64.deb
-```
-
 #### ■参考となるk8sドキュメント
 > [Killacoda](https://killercoda.com/playgrounds/scenario/kubernetes)
 
@@ -88,4 +69,5 @@ cri-dockerインストール後は
 ・cri-dockerのSystemdを有効化にして、開始する必要があり（enableの適用）があるのでそこを注意
 その後は、ブリッジネットワークを設定すれば完了となります。
 ```
+
 
