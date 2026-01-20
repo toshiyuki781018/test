@@ -1,58 +1,5 @@
 # 問題７：PersistentVolumeClaimの作成（作成したStorageClassを使用）
 
-## 【問題】
-
-指定されたNamespaceのDeploymentが誤って削除されてしまった。データの永続性を確保しつつ、Deploymentを復元する必要がある。
-以下設定内容で復元を実施しなさい。尚、StorageClassは先程作成した「local-path」を使用しなさい
-
-## 【設定情報】
-
-- Namespace `mariadb`
-- PersistenVolume `mariadb-pv`
-- persistenVolumeClaim `mariadb`
-- Accessモード `ReadWriteOnce`
-- Storageの容量 `250Mi`
-- StorageClass `local-path`
-- 適用するYamlファイル `mariadb-deploy.yaml　`
-
-## 【■事前準備】
-
-#### ■Namespaceの作成
-```bash
-kubectl create namespace mariadb
-```
-
-#### ■persistenVolumeの作成・適用・確認
-```yaml
-cat > maria-pv.yaml << EOF
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mariadb-pv
-spec:
-  capacity:
-    storage: 300Mi
-  accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
-  hostPath:
-    path: "/tmp/mariadb-data"
-EOF
-```
-
-```bash
-kubectl apply -f maria-pv.yaml
-
-kubectl get pv
-NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
-mariadb-pv   300Mi      RWO            Retain           Available           local-path     <unset>                          7s
-```
-
-#### ■最後に適用するDeploymentファイルのDL
-```bash
-wget -o- https://gitlab.com/t-tashibu/yaml/-/raw/main/mariadb-deploy.yaml
-```
 
 #### ■参考となるk8sドキュメント
 
@@ -150,3 +97,4 @@ mariadb   Bound    mariadb-pv   300Mi      RWO            local-path     <unset>
 PersistentVolumeClaimとPersistentVolumeの関係をわかっている上で、ドキュメントを確認しながら
 作成を実施すれば特に難しい問題ではないですね
 ```
+
