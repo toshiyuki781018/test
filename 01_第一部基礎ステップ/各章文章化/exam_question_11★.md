@@ -1,71 +1,5 @@
 # 問題１１：PriorityClassの作成とPriorityClassNameの適用
 
-## 【問題】
-
-PodPriorityClassの作成を行い、すでにスケジューリングされているDeploymentに対して、
-PodPriorityClassNameを指定しなさい。設定条件は以下記載。
-
-## 【設定情報】
-
-- Pod PriorityClass名 `high-priority`
-- 優先するクラスの値 最高値より`1`小さいもの
-- PriorityClassを適用するDeployment `busybox-logger`
-- 指定するPod PriorityClass `high-priority`
-
-## 【■事前準備】
-
-#### ■NameSpaceの作成
-```bash
-kubectl create namespace priority
-```
-#### ■Pod Priorityを付与するDeploymentの作成
-```yaml
-cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
-    app: busybox-logger
-  name: busybox-logger
-  namespace: priority
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: busybox-logger
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: busybox-logger
-    spec:
-      containers:
-      - args:
-        - while true; do echo "$(date) - Log message from busybox-logger"; sleep 5; 
-          done
-        command:
-        - /bin/sh
-        - -c
-        image: busybox:stable
-        name: logger
-EOF
-```
-
-#### ■ベースとなるPriorityClassの「user-high-priority」作成と確認
-```bash
-kubectl create priorityclass user-high-priority --value=800000 --description="Priotity class for user defined high-priority user workload"
-```
-
-```bash
-kubectl get priorityclass
-NAME                      VALUE        GLOBAL-DEFAULT   AGE
-system-cluster-critical   2000000000   false            24h
-system-node-critical      2000001000   false            24h
-user-high-priority        800000       false            7s
-```
-
 #### ■参考となるk8sドキュメント
 
 > [PodPriorityClassの作成](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#example-priorityclass)
@@ -144,3 +78,4 @@ PriorityClassを付与した後で、Errorが発生するのでそのエラー�
 PriorityClassの作成、PriorityClassNameの指定。この2つを実施できればそこまで難しい問題ではないです。
 それに加えて、ベースとなるPriorityClassから値をマイナス１引いた値をせっていできればよし
 ```
+
