@@ -1,17 +1,5 @@
 # 問題６：StorageClassの追加
 
-## 【問題】
-kubernetes環境にStorageClassを追加しなさい。設定情報は下記に記載
-
-## 【設定情報】
-
-- Strorageclass名 `local-path`
-- Volumeのバインドモード `WaitForFirstConsumer`
-- Provisioner設定 `rancher.io/local-path`
-- 追加設定 作成するStrorageclassを`Default`に設定にする
-
-## 【■事前準備】作成するリソースなどは無し
-
 #### ■参考となるk8sドキュメント
 
 > [StorageClassの設定](https://kubernetes.io/docs/concepts/storage/storage-classes/#storageclass-objects)
@@ -50,3 +38,4 @@ local-path (default)   rancher.io/local-path   Delete          WaitForFirstConsu
 特に難しい問題ではない。ドキュメントの箇所を覚えておいて、それを追記できればよし
 
 ```
+
