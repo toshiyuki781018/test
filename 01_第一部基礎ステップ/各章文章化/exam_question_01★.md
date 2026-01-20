@@ -1,38 +1,5 @@
 # 問題１：HorizontalPodAutoscaler(hpa)の設定
 
-## 【問題】
-
-対象となるNamespaceに作成されているDeploymentに対し、HPA（Horizontal Pod Autoscaler）を作成し,
-下記設定情報を元にHPAのYamlファイルを作成し、対象のKubernetesクラスターへApplyしなさい
-
-
-
-## 【設定情報】
-
-- Namespace   `autoscale`
-- HPAの名称：   `apache-server`
-- Deployment名 `apache-server`
-- Pod1つあたりCPU使用率 `50％`
-- 最小レプリカ数 `1`
-- 最大レプリカ数 `4`　
-- 安定化ウィンドウの設定秒数 `30`
-- 他設定 `stabilizationWindow`
-
-## 【■事前準備】
-
-#### ■NameSpaceとDeploymentの作成
-
-```bash
-kubectl create ns autoscale
-kubectl create deployment apache-server --image=nginx --replicas=1 -n autoscale
-```
-
-#### ■参考となるk8sドキュメント
-
-> [HPAのテンプレートYamlファイル](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics)
-
-> [安定化ウィンドウの設定](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#stabilization-window)
-
 
 ## 【▼回答】
 
@@ -132,4 +99,5 @@ Behavior:
 
 - この問題は対象となるDeploymentにHPAを適用する問題になります。
 - k8sのドキュメントはHPAを検索すれば表記可能
+
 - その上で「behavior:」以下を追加する必要があり、そのドキュメントを別途探して記載する必要があるか、覚えておく必要がある。
