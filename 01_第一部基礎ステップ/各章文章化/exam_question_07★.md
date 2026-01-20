@@ -1,4 +1,4 @@
-# 問題７：PersistentVolumeClaimの作成（作成したStorageClassを使用）
+# 問題７：PersistentVolumeClaimの作成
 
 
 #### ■参考となるk8sドキュメント
@@ -97,4 +97,5 @@ mariadb   Bound    mariadb-pv   300Mi      RWO            local-path     <unset>
 PersistentVolumeClaimとPersistentVolumeの関係をわかっている上で、ドキュメントを確認しながら
 作成を実施すれば特に難しい問題ではないですね
 ```
+
 
