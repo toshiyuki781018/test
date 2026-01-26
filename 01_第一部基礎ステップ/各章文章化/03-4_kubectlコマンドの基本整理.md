@@ -8,17 +8,18 @@
 kubectlはKubernetes を「操作する」ための道具ではなく、「状態を確認する」ための道具であるという位置づけです。
 
 ## ■kubectl とは何か
-kubectl は、Kubernetes クラスタに対して
+#### kubectl は、Kubernetes クラスタに対して
 
 今どんな状態か何が存在しているかを問い合わせるための クライアントツール です。
 kubectl 自体が何かを判断したり、勝手にリソースを管理することはありません。
 
 - 判断するのは Kubernetes、
 - kubectl は「伝える」「見る」だけ
+
 という役割分担になっています。
 
 ## ■kubectl get
-― 今の状態を一覧で見る ―
+#### ― 今の状態を一覧で見る ―
 ```bash
 kubectl get pod
 kubectl get deployment
@@ -33,7 +34,7 @@ get は、「今、何が存在しているか」を一覧で確認するコマ�
 
 
 ## ■kubectl describe
-― なぜその状態になっているかを見る ―
+#### ― なぜその状態になっているかを見る ―
 ```bash
 kubectl describe pod sample-pod
 ```
@@ -49,7 +50,7 @@ describe は、「なぜ今この状態なのか」を確認するためのコ�
 get が スナップショット だとすると、describe は 経緯を見るための道具 です。
 
 ## kubectl apply
-― あるべき状態を伝える ―
+#### ― あるべき状態を伝える ―
 ```bash
 kubectl apply -f deployment.yaml
 ```
@@ -59,6 +60,7 @@ apply は、「この状態であってほしい」という宣言を Kubernetes
 ここで重要なのは、
 - Pod を起動しろ
 - コンテナを動かせ
+
 といった 操作命令ではない という点です。
 
 Kubernetes は、現在の状態から宣言された状態を比較し、その差分を埋めるように動きます。
@@ -79,7 +81,7 @@ Deployment のような管理単位がある場合、
 
 
 ## ■kubectl scale
-― 数だけを変える ―
+#### ― 数だけを変える ―
 ```bash
 kubectl scale deployment sample-deployment --replicas=3
 ```
@@ -93,7 +95,7 @@ scale は、「いくつ存在してほしいか」だけを変更するコマ�
 人は 数だけ を指定します。
 
 ## ■kubectl expose
-― 接続点を作る ―
+#### ― 接続点を作る ―
 ```bash
 kubectl expose deployment sample-deployment --type=ClusterIP --port=80
 ```
@@ -110,7 +112,7 @@ expose は、リソースを Service 経由で公開する
 Service がその責務を引き受けます。
 
 ## ■kubectl logs / exec
-― 中を「のぞく」ための道具 ―
+#### ― 中を「のぞく」ための道具 ―
 ```bash
 kubectl logs <pod名>
 kubectl exec -it <pod名> -- /bin/sh
