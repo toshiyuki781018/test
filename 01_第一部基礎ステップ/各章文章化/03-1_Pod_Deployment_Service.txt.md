@@ -146,7 +146,7 @@ kubectl get pod
 ```
 
 #### 🔍 観察ポイント
--Pod が3つ存在する
+- Pod が3つ存在する
 - どの Pod が増えたかは意識していない
 - 人は「数」しか指定していない
 
@@ -167,9 +167,8 @@ kubectl expose deployment sample-deployment \
 kubectl get service
 ```
 
-Service 経由でアクセス確認
 
-#### KillerCoda 環境では、次のように確認します。
+#### Service 経由でアクセス確認。KillerCoda 環境では、次のように確認します。
 ```bash
 kubectl run curl --rm -it --image=curlimages/curl --restart=Never -- \
   curl http://sample-service
