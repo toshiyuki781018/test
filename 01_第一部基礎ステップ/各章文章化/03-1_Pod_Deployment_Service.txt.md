@@ -1,5 +1,5 @@
 # 3-1 ハンズオン：Pod / Deployment / Service
-― 壊して、戻って、任せる ―
+## ― 壊して、戻って、任せる ―
 
 想定環境：KillerCoda（Kubernetes クラスタ起動済み）
 以降の操作はすべて kubectl を使用します。
@@ -214,3 +214,4 @@ Kubernetes は
 - 状態を実行単位から切り離す
 
 ConfigMap / Secret / Volume に進みます。
+
