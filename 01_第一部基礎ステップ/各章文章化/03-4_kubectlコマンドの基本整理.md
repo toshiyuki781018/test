@@ -5,7 +5,11 @@
 
 重要なのは、
 
-kubectlはKubernetes を「操作する」ための道具ではなく、「状態を確認する」ための道具であるという位置づけです。
+kubectlはKubernetes を
+- 「操作する」ための道具ではなく、
+- 「状態を確認する」ための道具である
+
+という位置づけです。
 
 ## ■kubectl とは何か
 #### kubectl は、Kubernetes クラスタに対して
@@ -140,4 +144,5 @@ kubectl exec -it <pod名> -- /bin/sh
 kubectl はKubernetes を操る道具ではなく、状態をやり取りする窓口
 
 この感覚が掴めていれば、細かい使い方は後からいくらでも補えます。
+
 
