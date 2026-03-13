@@ -56,10 +56,10 @@ RBACでは、
 RBACは主に次の要素で構成されます。
 
 **Role / ClusterRole**  
-許可する操作を定義します。
+- 許可する操作を定義します。
 
 **RoleBinding / ClusterRoleBinding**  
-ユーザーやサービスアカウントに Roleを関連付けます。
+- ユーザーやサービスアカウントに Roleを関連付けます。
 
 この仕組みにより、
 
