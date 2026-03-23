@@ -101,7 +101,7 @@ RBACやポリシー管理を利用することで、
 システムの信頼性を高めていくことが重要になります。
 
 このような考え方は  
-**SRE（Site Reliability Engineering）**として体系化され、  
+**SRE（Site Reliability Engineering）** として体系化され、  
 多くのクラウドサービスで採用されています。
 
 ---
