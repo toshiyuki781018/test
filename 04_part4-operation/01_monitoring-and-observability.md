@@ -1,5 +1,5 @@
-# 第1章：モニタリングと可観測性  
-（Prometheus / Grafana / Cilium）
+# 第1章：モニタリングと可観測性  （Prometheus / Grafana / Cilium）
+
 
 ## 1. システムは見えなくなる
 
