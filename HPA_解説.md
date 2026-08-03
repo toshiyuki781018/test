@@ -4,6 +4,8 @@
 > 受講者が **HPA を設計するときの考え方（判断の型）** を身につけるための教材である。
 > 講師は、答えを渡すのではなく、判断の順序を一緒にたどる進行を想定すること。
 
+
+ 回答
 ```
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
