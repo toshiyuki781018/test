@@ -4,6 +4,34 @@
 > 受講者が **HPA を設計するときの考え方（判断の型）** を身につけるための教材である。
 > 講師は、答えを渡すのではなく、判断の順序を一緒にたどる進行を想定すること。
 
+```
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ec-api-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ec-api
+
+  minReplicas: 2
+  maxReplicas: 6
+
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30
+```
+
 ---
 
 ## 1. この問題で身につく能力
