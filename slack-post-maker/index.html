@@ -163,6 +163,7 @@
   ul.checks li.warn { background: var(--warn-bg); color: var(--warn-text); }
   ul.checks li.ok { background: var(--ok-bg); color: var(--ok-text); }
   .copied { color: var(--ok-text); font-size: 0.9rem; align-self: center; }
+  .copy-failed { color: var(--error-text); font-size: 0.9rem; align-self: center; }
 </style>
 </head>
 <body>
@@ -334,19 +335,47 @@
     $("copied").hidden = true;
   }
 
-  async function copyPost() {
-    const text = $("output").textContent;
+  // コピーできたときだけ true を返す
+  async function writeClipboard(text) {
     try {
       await navigator.clipboard.writeText(text);
+      return true;
     } catch {
       const ta = document.createElement("textarea");
       ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand("copy");
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
       ta.remove();
+      return ok;
     }
-    $("copied").hidden = false;
+  }
+
+  async function copyPost() {
+    const ok = await writeClipboard($("output").textContent);
+    const status = $("copied");
+    if (ok) {
+      status.textContent = "コピーしました";
+      status.className = "copied";
+    } else {
+      // コピーできなかったことを伝え、手動でコピーできるよう投稿文を選択しておく
+      const range = document.createRange();
+      range.selectNodeContents($("output"));
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      status.textContent = "コピーできませんでした。投稿文を選択したので Ctrl+C（Macは⌘+C）でコピーしてください";
+      status.className = "copy-failed";
+    }
+    status.hidden = false;
   }
 
   document.querySelectorAll('input[name="purpose"]').forEach((r) => r.addEventListener("change", render));
