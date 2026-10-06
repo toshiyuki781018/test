@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slack投稿メーカー</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --text: #1d1f23;
+    --muted: #5f6672;
+    --border: #d9dde3;
+    --accent: #3b5bdb;
+    --accent-text: #ffffff;
+    --warn-bg: #fff6e0;
+    --warn-text: #7a5300;
+    --error-bg: #fdecec;
+    --error-text: #9b1c1c;
+    --ok-bg: #e8f6ec;
+    --ok-text: #1e6b34;
+    --code-bg: #f1f3f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171b;
+      --panel: #1e2126;
+      --text: #e6e8eb;
+      --muted: #9aa1ad;
+      --border: #343a43;
+      --accent: #748ffc;
+      --accent-text: #10131a;
+      --warn-bg: #3a2f12;
+      --warn-text: #f5d38a;
+      --error-bg: #3d1d1d;
+      --error-text: #f4a9a9;
+      --ok-bg: #173323;
+      --ok-text: #9fe0b2;
+      --code-bg: #262a31;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171b;
+    --panel: #1e2126;
+    --text: #e6e8eb;
+    --muted: #9aa1ad;
+    --border: #343a43;
+    --accent: #748ffc;
+    --accent-text: #10131a;
+    --warn-bg: #3a2f12;
+    --warn-text: #f5d38a;
+    --error-bg: #3d1d1d;
+    --error-text: #f4a9a9;
+    --ok-bg: #173323;
+    --ok-text: #9fe0b2;
+    --code-bg: #262a31;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", sans-serif;
+    line-height: 1.6;
+  }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 20px; font-size: 0.95rem; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    min-width: 0;
+  }
+  .panel h2 { font-size: 1rem; margin: 0 0 12px; }
+
+  .field { margin-bottom: 16px; }
+  .field > label, .field > .label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .hint { color: var(--muted); font-size: 0.85rem; font-weight: normal; }
+
+  .purpose { display: flex; flex-wrap: wrap; gap: 8px; }
+  .purpose label {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .purpose input { accent-color: var(--accent); margin: 0; }
+  .purpose label:has(input:checked) {
+    border-color: var(--accent);
+    outline: 1px solid var(--accent);
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  textarea { min-height: 220px; resize: vertical; }
+  input[type="text"]:focus, textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .counter { text-align: right; font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  button {
+    font: inherit;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+  }
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+
+  pre#output {
+    background: var(--code-bg);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 0 0 12px;
+    min-height: 200px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+
+  ul.checks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 6px; }
+  ul.checks li { border-radius: 8px; padding: 8px 10px; font-size: 0.9rem; }
+  ul.checks li.error { background: var(--error-bg); color: var(--error-text); }
+  ul.checks li.warn { background: var(--warn-bg); color: var(--warn-text); }
+  ul.checks li.ok { background: var(--ok-bg); color: var(--ok-text); }
+  .copied { color: var(--ok-text); font-size: 0.9rem; align-self: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Slack投稿メーカー</h1>
+  <p class="lead">結論 → 詳細 → お願い の順番で、そのまま貼れる投稿文を作ります。入力した内容はこの画面の外には送られません。</p>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>入力</h2>
+
+      <div class="field">
+        <span class="label">1. 投稿の目的</span>
+        <div class="purpose" role="radiogroup">
+          <label><input type="radio" name="purpose" value="share" checked> 共有</label>
+          <label><input type="radio" name="purpose" value="decide"> 判断のお願い</label>
+          <label><input type="radio" name="purpose" value="confirm"> 次の動きの確認</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="conclusion">2. ひとことで言うと <span class="hint">（結論を1行で）</span></label>
+        <input type="text" id="conclusion" placeholder="例：ログイン遅延の原因はDBのインデックス不足でした">
+        <div class="counter" id="conclusion-count">0 / 40文字</div>
+      </div>
+
+      <div class="field">
+        <label for="details">3. 詳しいメモ <span class="hint">（箇条書きでも文章でもOK）</span></label>
+        <textarea id="details" placeholder="- やったこと&#10;- 分かったこと&#10;- 今後のこと"></textarea>
+      </div>
+
+      <div class="buttons">
+        <button type="button" id="sample">サンプルを入れる</button>
+        <button type="button" id="clear">クリア</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>投稿文</h2>
+      <pre id="output"></pre>
+      <div class="buttons">
+        <button type="button" class="primary" id="copy">コピー</button>
+        <span class="copied" id="copied" hidden>コピーしました</span>
+      </div>
+      <ul class="checks" id="checks"></ul>
+    </section>
+  </div>
+</main>
+
+<script>
+  // 目的ごとの見出し・締めの文
+  const PURPOSES = {
+    share: {
+      tag: "共有",
+      request: "共有のみです。気になる点があればスレッドでお知らせください。"
+    },
+    decide: {
+      tag: "判断のお願い",
+      request: "上記についてご判断をお願いします。"
+    },
+    confirm: {
+      tag: "確認",
+      request: "次の進め方について認識が合っていればリアクションを、違っていればスレッドでお知らせください。"
+    }
+  };
+
+  const CONCLUSION_MAX = 40;
+  const DETAIL_LINES_MAX = 10;
+  const TOTAL_CHARS_MAX = 600;
+  const DEADLINE_PATTERN = /期限|まで|〆|締め切|締切|今日中|本日中|明日|今週|来週|\d{1,2}\/\d{1,2}|\d{1,2}月\d{1,2}日/;
+  const VAGUE_WORDS = ["なるはや", "いい感じ", "例の件", "例のやつ", "諸々", "色々", "いろいろ", "適当に"];
+
+  const $ = (id) => document.getElementById(id);
+
+  // 行頭の記号（- * ・ • ● 1. など）を取り除く
+  function stripBullet(line) {
+    return line.replace(/^\s*(?:[-*・•●○◦▪]|\d+[.)．）])\s*/, "").trim();
+  }
+
+  // メモを箇条書きの行に分ける。改行のない文章は「。」で区切る
+  function toItems(text) {
+    const rawLines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+    let lines = rawLines;
+    if (rawLines.length === 1 && (rawLines[0].match(/。/g) || []).length >= 2) {
+      lines = rawLines[0].split(/(?<=。)/).filter((l) => l.trim() !== "");
+    }
+    return lines.map((line) => ({
+      text: stripBullet(line),
+      nested: /^(?:\t|\s{2,}|　)/.test(line)
+    })).filter((item) => item.text !== "");
+  }
+
+  function buildPost(purposeKey, conclusion, items, hasDeadline) {
+    const p = PURPOSES[purposeKey];
+    const parts = [];
+    parts.push(`*【${p.tag}】${conclusion || "（結論を入力してください）"}*`);
+
+    if (items.length > 0) {
+      const body = items.map((i) => (i.nested ? "    ◦ " : "• ") + i.text).join("\n");
+      parts.push(`*詳細*\n${body}`);
+    }
+
+    let request = p.request;
+    if (purposeKey === "decide" && !hasDeadline) {
+      request += "\n（期限：【要記入】まで）";
+    }
+    parts.push(`*お願い*\n${request}`);
+
+    return parts.join("\n\n");
+  }
+
+  function runChecks(purposeKey, conclusion, items, allText, post) {
+    const checks = [];
+    if (conclusion === "") {
+      checks.push(["error", "結論が空です。「ひとことで言うと」を入れてください。"]);
+    } else if (conclusion.length > CONCLUSION_MAX) {
+      checks.push(["warn", `結論が長めです（${conclusion.length}文字）。${CONCLUSION_MAX}文字以内を目安に言い切ってみてください。`]);
+    }
+
+    if (items.length === 0) {
+      checks.push(["warn", "詳しいメモが空です。やったこと・分かったことを書くと伝わりやすくなります。"]);
+    } else if (items.length > DETAIL_LINES_MAX) {
+      checks.push(["warn", `詳細が${items.length}行あります。${DETAIL_LINES_MAX}行を超える部分はスレッドに分けるのがおすすめです。`]);
+    }
+
+    if (purposeKey === "decide" && !DEADLINE_PATTERN.test(allText)) {
+      checks.push(["warn", "判断のお願いなのに期限が書かれていません。投稿文の【要記入】を埋めるか、メモに期限を書いてください。"]);
+    }
+    if (purposeKey !== "share" && !allText.includes("@")) {
+      checks.push(["warn", "誰に判断・確認してほしいかが分かりません。@メンションを入れると返事がもらいやすくなります。"]);
+    }
+
+    const vague = VAGUE_WORDS.filter((w) => allText.includes(w));
+    if (vague.length > 0) {
+      checks.push(["warn", `あいまいな言葉があります：${vague.join("、")}。具体的な内容や日付に置き換えてみてください。`]);
+    }
+
+    if (post.length > TOTAL_CHARS_MAX) {
+      checks.push(["warn", `投稿全体が${post.length}文字あります。${TOTAL_CHARS_MAX}文字以内だと読んでもらいやすくなります。`]);
+    }
+
+    if (checks.length === 0) {
+      checks.push(["ok", "抜け漏れは見つかりませんでした。"]);
+    }
+    return checks;
+  }
+
+  function render() {
+    const purposeKey = document.querySelector('input[name="purpose"]:checked').value;
+    const conclusion = $("conclusion").value.trim();
+    const details = $("details").value;
+    const items = toItems(details);
+    const allText = conclusion + "\n" + details;
+    const hasDeadline = DEADLINE_PATTERN.test(allText);
+
+    const post = buildPost(purposeKey, conclusion, items, hasDeadline);
+    $("output").textContent = post;
+
+    const count = $("conclusion-count");
+    count.textContent = `${conclusion.length} / ${CONCLUSION_MAX}文字`;
+
+    const list = $("checks");
+    list.replaceChildren(...runChecks(purposeKey, conclusion, items, allText, post).map(([level, msg]) => {
+      const li = document.createElement("li");
+      li.className = level;
+      li.textContent = (level === "ok" ? "✓ " : level === "error" ? "✕ " : "⚠ ") + msg;
+      return li;
+    }));
+    $("copied").hidden = true;
+  }
+
+  async function copyPost() {
+    const text = $("output").textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    $("copied").hidden = false;
+  }
+
+  document.querySelectorAll('input[name="purpose"]').forEach((r) => r.addEventListener("change", render));
+  $("conclusion").addEventListener("input", render);
+  $("details").addEventListener("input", render);
+  $("copy").addEventListener("click", copyPost);
+  $("clear").addEventListener("click", () => {
+    $("conclusion").value = "";
+    $("details").value = "";
+    render();
+  });
+  $("sample").addEventListener("click", () => {
+    document.querySelector('input[name="purpose"][value="decide"]').checked = true;
+    $("conclusion").value = "ログイン遅延の原因はDBのインデックス不足でした";
+    $("details").value = [
+      "- 昨日からのログイン遅延を調査",
+      "- usersテーブルの検索でフルスキャンが発生していた",
+      "  - email列にインデックスがない",
+      "- 検証環境でインデックスを追加したら3秒→0.2秒に改善",
+      "- 本番に入れるには数分のメンテナンスが必要",
+      "@田中さん 今週中に本番適用してよいか判断をお願いします"
+    ].join("\n");
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
